@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.rubyforge_project = "vipps"
 
   s.add_dependency "httpi"
-  s.add_dependency "nori"
+  s.add_dependency "multi_json"
   s.add_dependency "hashie"
 
   s.files         = `git ls-files`.split("\n")

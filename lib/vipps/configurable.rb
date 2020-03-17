@@ -4,11 +4,10 @@ module Vipps
   # in {Default}
   module Configurable
     CONFIGURATION_KEYS = [
-      :access_token,
       :client_id,
       :client_secret,
-      :subscription_access_token,
-      :subscription_recurring_token,
+      :ocp_apim_access_token,
+      :ocp_apim_access_token_secondary,
       :merchant_redirect_url,
       :merchant_agreement_url,
       :default_currency,
@@ -18,7 +17,7 @@ module Vipps
       :base_uri,
       :debug,
       :log,
-      :logger
+      :logger,
       :log_level
     ]
 

@@ -1,13 +1,14 @@
 require 'httpi'
 require 'nori'
 require 'hashie'
+require_relative './error'
 require 'vipps/communication_normalizer'
 
 module Vipps
   class Client
     include Vipps::Configurable
     include Vipps::CommunicationNormalizer
-
+    attr_reader :access_token
 
     def initialize(options = {})
       # Use options passed in, but fall back to module defaults
@@ -23,15 +24,19 @@ module Vipps
         client_id: client_id,
         client_secret: client_secret
       }
-      resp = get_response("accessToken/get", {}, headers)
+      resp = get_response("accessToken/get", :post, {}, headers)
       @acess_token = resp["access_token"]
     end
 
-    def get_response(path, params, headers = nil)
+    def get_response(path, method, params, headers = nil)
       request   = build_request File.join(base_uri, path), params, headers
-      response  = HTTPI.get(request)
-      body      = parser.parse(response.body)
-      Hashie::Mash.new(deep_underscore(body))
+      response  = HTTPI.send method, request
+      body = MultiJson.load(response.body, :symbolize_keys => true)
+      unless response.error?
+        Hashie::Mash.new(deep_underscore(body))
+      else
+        raise Vipps::Error.new(body)
+      end
     end
 
     def build_request(url, params = {}, headers)
@@ -43,10 +48,6 @@ module Vipps
       request.headers = { "Ocp-Apim-Subscription-Key": ocp_apim_access_token }.merge(req_headers)
       request.body = deep_camelize(params)
       request
-    end
-
-    def parser
-      @parser ||= Nori.new(strip_namespaces: true, convert_tags_to: ->(tag){tag.snakecase.to_sym})
     end
 
     # Compares client options to a Hash of requested options

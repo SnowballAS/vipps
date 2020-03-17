@@ -1,4 +1,4 @@
-require 'Vipps/version'
+require 'vipps/version'
 
 module Vipps
 
@@ -7,9 +7,6 @@ module Vipps
 
     # Default API environment
     ENVIRONMENT = :test
-
-    # Default User Agent header string
-    USER_AGENT   = "Vipps Ruby Gem #{Vipps::VERSION}".freeze
 
     class << self
 
@@ -63,6 +60,14 @@ module Vipps
         end
       end
 
+      def merchant_agreement_url
+        ENV['SERVER_URL'].to_s + "/agreement"
+      end
+
+      def merchant_redirect_url
+        ENV['SERVER_URL'].to_s + "/redirect"
+      end
+
       def debug
         false
       end
@@ -79,10 +84,8 @@ module Vipps
         # STDOUT
       end
 
-      # Default User-Agent header string from ENV or {USER_AGENT}
-      # @return [String]
       def user_agent
-        ENV['NETENT_USER_AGENT'] || USER_AGENT
+        "Vipps Ruby Gem #{Vipps::VERSION}".freeze
       end
     end
   end
