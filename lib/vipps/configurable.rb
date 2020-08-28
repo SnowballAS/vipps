@@ -25,7 +25,7 @@ module Vipps
 
     class << self
 
-      # List of configurable keys for {Netaxept::Client}
+      # List of configurable keys for {Vipps::Client}
       # @return [Array] of option keys
       def keys
         @keys ||= CONFIGURATION_KEYS

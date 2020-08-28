@@ -22,10 +22,27 @@ module Vipps
     def get_access_token
       headers = {
         client_id: client_id,
-        client_secret: client_secret
+        client_secret: client_secret,
+        "Ocp-Apim-Subscription-Key": ocp_apim_access_token
       }
       resp = get_response("accessToken/get", :post, {}, headers)
-      @acess_token = resp["access_token"]
+      @access_token = resp["access_token"]
+    end
+
+    def draft_agreement(opts = {})
+      body = {
+        "currency": "NOK",
+        "interval": opts[:interval] || "WEEK",
+        "intervalCount": opts[:interval_count] || "1",
+        "isApp": opts[:is_app] || false, # receive confirmation deeplink for app requests
+        "merchantRedirectUrl": opts[:redirect_url] || "http://localhost:9292/vipps",
+        "merchantAgreementUrl": opts[:agreement_url] || "http://localhost:9292/vipps_agreement",
+        "customerPhoneNumber": opts[:phone],
+        "price": 100, # 1 NOK
+        "productDescription": "#{opts[:product]} description",
+        "productName": "#{opts[:product]} subscription"
+      }
+      get_response("recurring/v2/agreements", :post, body, headers)
     end
 
     def get_response(path, method, params, headers = nil)
@@ -41,12 +58,14 @@ module Vipps
 
     def build_request(url, params = {}, headers)
       request = HTTPI::Request.new url: url
-      req_headers = headers ||  {
+      req_headers = headers.merge({
         "Content-Type": "application/json",
         "Authorization": "bearer #{@access_token}"
-      }
+      })
       request.headers = { "Ocp-Apim-Subscription-Key": ocp_apim_access_token }.merge(req_headers)
-      request.body = deep_camelize(params)
+      pp "HEADERS: #{request.headers.inspect}"
+      request.body = params.to_json
+      pp "BODY: #{request.body}    #{params}"
       request
     end
 

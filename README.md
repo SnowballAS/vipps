@@ -7,4 +7,4 @@ run
 
 or include in your _Gemfile_:
 
-    gem 'netaxept'
+    gem 'vipps'
