@@ -35,17 +35,35 @@ module Vipps
         "interval": opts[:interval] || "WEEK",
         "intervalCount": opts[:interval_count] || "1",
         "isApp": opts[:is_app] || false, # receive confirmation deeplink for app requests
-        "merchantRedirectUrl": opts[:redirect_url] || "http://localhost:9292/vipps",
-        "merchantAgreementUrl": opts[:agreement_url] || "http://localhost:9292/vipps_agreement",
+        "merchantRedirectUrl": opts[:redirect_url] || "http://facilityfarm.no/vipps",
+        "merchantAgreementUrl": opts[:agreement_url] || "http://facilityfarm.no/vipps_agreement",
         "customerPhoneNumber": opts[:phone],
         "price": 100, # 1 NOK
         "productDescription": "#{opts[:product]} description",
         "productName": "#{opts[:product]} subscription"
       }
-      get_response("recurring/v2/agreements", :post, body, headers)
+      get_response("recurring/v2/agreements", :post, body)
     end
 
-    def get_response(path, method, params, headers = nil)
+    def get_agreement(id)
+      get_response("recurring/v2/agreements/#{id}", :get, {})
+    end
+
+    def charge(opts = {})
+      body = {
+        amount: opts[:amount],
+        currency: "NOK",
+        description: "#{opts[:product]} weekly charge",
+        due: 2.days.from_now,
+        retryDays: opts[:retry_days] || 3,
+        hasPriceChanged: false
+      }
+      get_response("recurring/v2/agreements/#{opts[:agreement_id]}/charges", :post, body)
+    end
+
+    private
+
+    def get_response(path, method, params, headers = {})
       request   = build_request File.join(base_uri, path), params, headers
       response  = HTTPI.send method, request
       body = MultiJson.load(response.body, :symbolize_keys => true)
@@ -60,9 +78,10 @@ module Vipps
       request = HTTPI::Request.new url: url
       req_headers = headers.merge({
         "Content-Type": "application/json",
-        "Authorization": "bearer #{@access_token}"
+        "Authorization": "bearer #{@access_token}",
+        "Ocp-Apim-Subscription-Key": ocp_apim_access_token
       })
-      request.headers = { "Ocp-Apim-Subscription-Key": ocp_apim_access_token }.merge(req_headers)
+      request.headers = req_headers
       pp "HEADERS: #{request.headers.inspect}"
       request.body = params.to_json
       pp "BODY: #{request.body}    #{params}"
