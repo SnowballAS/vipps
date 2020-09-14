@@ -53,7 +53,7 @@ module Vipps
       body = {
         amount: opts[:amount],
         currency: "NOK",
-        description: "#{opts[:product]} weekly charge",
+        description: opts[:description],
         due: 2.days.from_now,
         retryDays: opts[:retry_days] || 3,
         hasPriceChanged: false
