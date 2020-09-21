@@ -1,15 +1,10 @@
-# This gem wraps the current Vipps REST api in a nice fashion
-#
-# Author::    Mikael Henriksson (mailto:mikael@zoolutions.se)
-# Copyright:: No fucking copyright here. Use it and abuse it steal as much as you want!
-# License::   TODO: do I really need to enter something here?
+require 'vipps/version'
+require 'vipps/configurable'
+require 'vipps/client'
+require 'vipps/default'
+
 
 module Vipps
-  require 'vipps/version'
-  require 'vipps/configurable'
-  require 'vipps/client'
-  require 'vipps/default'
-
   class << self
     include Vipps::Configurable
 
@@ -40,6 +35,6 @@ module Vipps
         client.send(method_name, *args, &block)
       end
   end
-
+  class Error < StandardError; end
   Vipps.setup
 end

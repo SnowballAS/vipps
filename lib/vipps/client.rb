@@ -38,9 +38,9 @@ module Vipps
         "merchantRedirectUrl": opts[:redirect_url] || "http://facilityfarm.no/vipps",
         "merchantAgreementUrl": opts[:agreement_url] || "http://facilityfarm.no/vipps_agreement",
         "customerPhoneNumber": opts[:phone],
-        "price": 100, # 1 NOK
-        "productDescription": "#{opts[:product]} description",
-        "productName": "#{opts[:product]} subscription"
+        "price": opts[:price] || 50000, # default to 500 NOK
+        "productDescription": opts[:description],
+        "productName": opts[:product]
       }
       get_response("recurring/v2/agreements", :post, body)
     end
@@ -54,11 +54,12 @@ module Vipps
         amount: opts[:amount],
         currency: "NOK",
         description: opts[:description],
-        due: 2.days.from_now,
+        due: opts[:due] || 2.days.from_now.to_date.to_s,
         retryDays: opts[:retry_days] || 3,
         hasPriceChanged: false
       }
-      get_response("recurring/v2/agreements/#{opts[:agreement_id]}/charges", :post, body)
+      headers = { "Idempotent-Key": opts[:idempotency_key] }
+      get_response("recurring/v2/agreements/#{opts[:agreement_id]}/charges", :post, body, headers)
     end
 
     private
@@ -82,9 +83,7 @@ module Vipps
         "Ocp-Apim-Subscription-Key": ocp_apim_access_token
       })
       request.headers = req_headers
-      pp "HEADERS: #{request.headers.inspect}"
       request.body = params.to_json
-      pp "BODY: #{request.body}    #{params}"
       request
     end
 
