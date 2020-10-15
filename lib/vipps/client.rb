@@ -16,7 +16,7 @@ module Vipps
         instance_variable_set(:"@#{key}", options[key] ||
           Vipps.instance_variable_get(:"@#{key}"))
       end
-      get_access_token
+      get_access_token if options[:access_token].present?
     end
 
     def get_access_token
