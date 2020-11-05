@@ -49,7 +49,7 @@ module Vipps
       end
 
       def default_currency
-        ENV['VIPPS_CURRENCY'] || "NOK"
+        ENV['CURRENCY'] || "NOK"
       end
 
       def base_uri

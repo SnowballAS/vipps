@@ -31,7 +31,7 @@ module Vipps
 
     def draft_agreement(opts = {})
       body = {
-        "currency": "NOK",
+        "currency": opts[:currency] || "NOK",
         "interval": opts[:interval] || "WEEK",
         "intervalCount": opts[:interval_count] || "1",
         "isApp": opts[:is_app] || false, # receive confirmation deeplink for app requests
@@ -52,7 +52,7 @@ module Vipps
     def charge(opts = {})
       body = {
         amount: opts[:amount],
-        currency: "NOK",
+        currency: opts[:currency] || "NOK",
         description: opts[:description],
         due: opts[:due] || 2.days.from_now.to_date.to_s,
         retryDays: opts[:retry_days] || 3,
