@@ -62,6 +62,18 @@ module Vipps
       get_response("recurring/v2/agreements/#{opts[:agreement_id]}/charges", :post, body, headers)
     end
 
+    def get_charge(id, agreement_id)
+      get_response("recurring/v2/agreements/#{agreement_id}/charges/#{id}", :get, {})
+    end
+
+    # Compares client options to a Hash of requested options
+    #
+    # @param opts [Hash] Options to compare with current client options
+    # @return [Boolean]
+    def same_options?(opts)
+      opts.hash == options.hash
+    end
+
     private
 
     def get_response(path, method, params, headers = {})
@@ -85,14 +97,6 @@ module Vipps
       request.headers = req_headers
       request.body = params.to_json
       request
-    end
-
-    # Compares client options to a Hash of requested options
-    #
-    # @param opts [Hash] Options to compare with current client options
-    # @return [Boolean]
-    def same_options?(opts)
-      opts.hash == options.hash
     end
 
   end
