@@ -56,7 +56,8 @@ module Vipps
         description: opts[:description],
         due: opts[:due] || 2.days.from_now.to_date.to_s,
         retryDays: opts[:retry_days] || 3,
-        hasPriceChanged: false
+        hasPriceChanged: false,
+        orderId: opts[:orderId]
       }
       headers = { "Idempotent-Key": opts[:idempotency_key] }
       get_response("recurring/v2/agreements/#{opts[:agreement_id]}/charges", :post, body, headers)
@@ -83,7 +84,7 @@ module Vipps
       unless response.error?
         Hashie::Mash.new(deep_underscore(body))
       else
-        raise Vipps::Error.new(body)
+        raise Vipps::Error.new(response.body)
       end
     end
 
