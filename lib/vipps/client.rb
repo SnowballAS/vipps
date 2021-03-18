@@ -49,6 +49,14 @@ module Vipps
       get_response("recurring/v2/agreements/#{id}", :get, {})
     end
 
+    def update_agreement(id, opts = {})
+      body = {}
+      body[:status] = opts[:status] if opts[:status]
+      body[:price] = opts[:price] if opts[:price]
+      return if body.blank?
+      get_response("recurring/v2/agreements/#{id}", :put, body, {})
+    end
+
     def charge(opts = {})
       body = {
         amount: opts[:amount],
