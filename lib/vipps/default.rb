@@ -19,7 +19,7 @@ module Vipps
       # Vipps environment from ENV or {ENVIRONMENT}
       # @return [String]
       def environment
-        ENV['VIPPS_ENVIRONMENT'] || ENVIRONMENT
+        ENV['VIPPS_ENVIRONMENT'].to_s.to_sym || ENVIRONMENT
       end
 
       # Vipps merchant id from ENV or configuration
