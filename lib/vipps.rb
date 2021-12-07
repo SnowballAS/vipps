@@ -1,6 +1,7 @@
 require 'vipps/version'
 require 'vipps/configurable'
 require 'vipps/client'
+require 'vipps/ecomm_client'
 require 'vipps/default'
 
 

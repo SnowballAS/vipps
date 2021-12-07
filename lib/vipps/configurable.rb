@@ -18,7 +18,8 @@ module Vipps
       :debug,
       :log,
       :logger,
-      :log_level
+      :log_level,
+      :merchant_number
     ]
 
     attr_accessor(*CONFIGURATION_KEYS)

@@ -68,6 +68,10 @@ module Vipps
         ENV['SERVER_URL'].to_s + "/redirect"
       end
 
+      def merchant_number
+        ''
+      end
+
       def debug
         false
       end

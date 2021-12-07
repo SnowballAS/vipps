@@ -33,7 +33,7 @@ module Vipps
       body = {
         customerInfo: {},
         merchantInfo: {
-          merchantSerialNumber: @merchant_number, #opts[:merchant_number]
+          merchantSerialNumber: @merchant_number,
           callbackPrefix: opts[:callback_url],
           fallBack: opts[:success_url],
           authToken: opts[:user_auth_token], # internal user token
@@ -51,10 +51,10 @@ module Vipps
     def capture(opts = {})
       body = {
         merchantInfo: {
-          merchantSerialNumber: @merchant_number, #opts[:merchant_number]
+          merchantSerialNumber: @merchant_number,
         },
         transaction: {
-          amount: opts[:amount]
+          amount: opts[:amount],
           transactionText: opts[:transaction_text]
         }
       }
@@ -73,7 +73,7 @@ module Vipps
     def cancel_order(order_id, description = '')
       body = {
         merchantInfo: {
-          merchantSerialNumber: @merchant_number, #opts[:merchant_number]
+          merchantSerialNumber: @merchant_number,
         },
         transaction: {
           transactionText: description
