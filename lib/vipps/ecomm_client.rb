@@ -104,7 +104,8 @@ module Vipps
       req_headers = headers.merge({
         "Content-Type": "application/json",
         "Authorization": "bearer #{@access_token}",
-        "Ocp-Apim-Subscription-Key": ocp_apim_access_token
+        "Ocp-Apim-Subscription-Key": ocp_apim_access_token,
+        "Merchant-Serial-Number": @merchant_number
       })
       request.headers = req_headers
       request.body = params.to_json

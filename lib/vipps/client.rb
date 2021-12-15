@@ -35,12 +35,14 @@ module Vipps
         "interval": opts[:interval] || "WEEK",
         "intervalCount": opts[:interval_count] || "1",
         "isApp": opts[:is_app] || false, # receive confirmation deeplink for app requests
-        "merchantRedirectUrl": opts[:redirect_url] || "http://facilityfarm.no/vipps",
+        "merchantRedirectUrl": opts[:redirect_url] || "http://facilityfarm.no/api/1/vipps",
         "merchantAgreementUrl": opts[:agreement_url] || "http://facilityfarm.no/vipps_agreement",
         "customerPhoneNumber": opts[:phone],
-        "price": opts[:price] || 50000, # default to 500 NOK
         "productDescription": opts[:description],
-        "productName": opts[:product]
+        "productName": opts[:product],
+        "variableAmount": {
+          "suggestedMaxAmount": opts[:price] || 200000, # default to 2000 NOK
+        },
       }
       get_response("recurring/v2/agreements", :post, body)
     end
@@ -101,7 +103,8 @@ module Vipps
       req_headers = headers.merge({
         "Content-Type": "application/json",
         "Authorization": "bearer #{@access_token}",
-        "Ocp-Apim-Subscription-Key": ocp_apim_access_token
+        "Ocp-Apim-Subscription-Key": ocp_apim_access_token,
+        "Merchant-Serial-Number": @merchant_number
       })
       request.headers = req_headers
       request.body = params.to_json
