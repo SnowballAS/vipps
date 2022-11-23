@@ -77,6 +77,15 @@ module Vipps
       get_response("recurring/v2/agreements/#{agreement_id}/charges/#{id}", :get, {})
     end
 
+    def refund(opts = {})
+      body = {
+        amount: opts[:amount],
+        description: opts[:description]
+      }
+      headers = { "Idempotent-Key": opts[:idempotency_key] }
+      get_response("recurring/v2/agreements/#{opts[:agreement_id]}/charges/#{opts[:charge_id]}/refund", :post, body, headers)
+    end
+
     # Compares client options to a Hash of requested options
     #
     # @param opts [Hash] Options to compare with current client options
@@ -104,7 +113,11 @@ module Vipps
         "Content-Type": "application/json",
         "Authorization": "bearer #{@access_token}",
         "Ocp-Apim-Subscription-Key": ocp_apim_access_token,
-        "Merchant-Serial-Number": @merchant_number
+        "Merchant-Serial-Number": @merchant_number,
+        "Vipps-System-Name": 'Snowball',
+        "Vipps-System-Version": '2.6',
+        "Vipps-System-Plugin-Name": 'Snowball-webshop',
+        "Vipps-System-Plugin-Version": '4.3'
       })
       request.headers = req_headers
       request.body = params.to_json
