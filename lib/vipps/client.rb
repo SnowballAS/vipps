@@ -97,13 +97,18 @@ module Vipps
     private
 
     def get_response(path, method, params, headers = {})
-      request   = build_request File.join(base_uri, path), params, headers
-      response  = HTTPI.send method, request
-      body = MultiJson.load(response.body, :symbolize_keys => true)
-      unless response.error?
-        Hashie::Mash.new(deep_underscore(body))
-      else
-        raise Vipps::Error.new(response.body)
+      begin
+        request   = build_request File.join(base_uri, path), params, headers
+        response  = HTTPI.send method, request
+        body = MultiJson.load(response.body, :symbolize_keys => true)
+        unless response.error?
+          Hashie::Mash.new(deep_underscore(body))
+        else
+          raise Vipps::Error.new(response.body)
+        end
+      rescue MultiJson::ParseError, JSON::ParserError => e
+        message = response.code == 500 ? 'Vipps server error' : response.body.inspect
+        raise Vipps::Error.new(message)
       end
     end
 
