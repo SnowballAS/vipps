@@ -78,7 +78,7 @@ module Vipps
       end
 
       def get_charge(id, agreement_id)
-        get_response("recurring/v2/agreements/#{agreement_id}/charges/#{id}", :get, {})
+        get_response("recurring/v3/agreements/#{agreement_id}/charges/#{id}", :get, {})
       end
 
       def refund(opts = {})
@@ -87,7 +87,7 @@ module Vipps
           description: opts[:description]
         }
         headers = { "Idempotency-Key": opts[:idempotency_key] }
-        get_response("recurring/v2/agreements/#{opts[:agreement_id]}/charges/#{opts[:charge_id]}/refund", :post, body, headers)
+        get_response("recurring/v3/agreements/#{opts[:agreement_id]}/charges/#{opts[:charge_id]}/refund", :post, body, headers)
       end
 
       # Compares client options to a Hash of requested options
