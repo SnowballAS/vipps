@@ -104,7 +104,6 @@ module Vipps
         request   = build_request File.join(base_uri, path), params, headers
         response  = HTTPI.send method, request
         body = MultiJson.load(response.body, :symbolize_keys => true)
-        binding.pry
         unless response.error?
           body
         else
