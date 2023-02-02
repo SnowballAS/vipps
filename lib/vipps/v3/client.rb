@@ -37,7 +37,7 @@ module Vipps
             currency: opts[:currency] || "NOK",
             suggestedMaxAmount: opts[:price] || 200000
           },
-          phoneNumber: opts[:phone],
+          customerPhoneNumber: opts[:phone],
           interval: {
             unit: opts[:interval] || "WEEK",
             count: opts[:interval_count] || "1"
