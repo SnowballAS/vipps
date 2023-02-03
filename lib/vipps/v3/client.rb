@@ -47,7 +47,7 @@ module Vipps
           productName: opts[:product],
           productDescription: opts[:description]
         }
-        body.merge!(customerPhoneNumber: opts[:phone]) unless opts[:phone].blank?
+        body.merge!(phoneNumber: opts[:phone]) unless opts[:phone].blank?
         headers = { "Idempotency-Key": opts[:idempotency_key] }
         get_response("recurring/v3/agreements", :post, body, headers)
       end
