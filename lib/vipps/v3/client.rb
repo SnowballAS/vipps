@@ -37,7 +37,6 @@ module Vipps
             currency: opts[:currency] || "NOK",
             suggestedMaxAmount: opts[:price] || 200000
           },
-          customerPhoneNumber: opts[:phone],
           interval: {
             unit: opts[:interval] || "WEEK",
             count: opts[:interval_count] || "1"
@@ -48,6 +47,7 @@ module Vipps
           productName: opts[:product],
           productDescription: opts[:description]
         }
+        body.merge!(customerPhoneNumber: opts[:phone]) unless opts[:phone].blank?
         headers = { "Idempotency-Key": opts[:idempotency_key] }
         get_response("recurring/v3/agreements", :post, body, headers)
       end
