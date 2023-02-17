@@ -102,7 +102,7 @@ module Vipps
 
       def get_response(path, method, params, headers = {})
         request   = build_request File.join(base_uri, path), params, headers
-        response  = HTTPI.send method, request
+        response  = HTTPI.request method, request
         body = MultiJson.load(response.body, :symbolize_keys => true)
         unless response.error?
           body
