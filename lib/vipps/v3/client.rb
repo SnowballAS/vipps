@@ -61,7 +61,8 @@ module Vipps
         body[:status] = opts[:status] if opts[:status]
         body[:price] = opts[:price] if opts[:price]
         return if body.blank?
-        get_response("recurring/v3/agreements/#{id}", :patch, body, {})
+        headers = { "Idempotency-Key": opts[:idempotency_key] }
+        get_response("recurring/v3/agreements/#{id}", :patch, body, headers)
       end
 
       def charge(opts = {})
