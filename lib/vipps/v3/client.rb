@@ -59,7 +59,7 @@ module Vipps
       def update_agreement(id, opts = {})
         body = {}
         body[:status] = opts[:status] if opts[:status]
-        body[:price] = opts[:price] if opts[:price]
+        body[:pricing] = { amount: opts[:price] } if opts[:price]
         return if body.blank?
         headers = { "Idempotency-Key": opts[:idempotency_key] }
         get_response("recurring/v3/agreements/#{id}", :patch, body, headers)
