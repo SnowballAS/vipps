@@ -56,6 +56,10 @@ module Vipps
         get_response("recurring/v3/agreements/#{id}", :get, {})
       end
 
+      def get_agreements
+        get_response("recurring/v3/agreements", :get, {})
+      end
+
       def update_agreement(id, opts = {})
         body = {}
         body[:status] = opts[:status] if opts[:status]
