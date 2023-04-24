@@ -35,7 +35,7 @@ module Vipps
           pricing: {
             type: "VARIABLE",
             currency: opts[:currency] || "NOK",
-            suggestedMaxAmount: opts[:price] || 200000
+            suggestedMaxAmount: opts[:price] || 300000
           },
           interval: {
             unit: opts[:interval] || "WEEK",
