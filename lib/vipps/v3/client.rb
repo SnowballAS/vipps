@@ -86,6 +86,14 @@ module Vipps
         get_response("recurring/v3/agreements/#{agreement_id}/charges/#{id}", :get, {})
       end
 
+      def get_charge_by_id(id)
+        get_response("recurring/v3/charges/#{id}", :get, {})
+      end
+
+      def get_charges(agreement_id)
+        get_response("recurring/v3/agreements/#{agreement_id}/charges", :get, {})
+      end
+
       def refund(opts = {})
         body = {
           amount: opts[:amount],
