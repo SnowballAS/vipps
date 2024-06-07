@@ -103,6 +103,30 @@ module Vipps
         get_response("recurring/v3/agreements/#{opts[:agreement_id]}/charges/#{opts[:charge_id]}/refund", :post, body, headers)
       end
 
+      def multiple_charge(orders = [], idempotency_key = nil)
+        body = orders.map do |order|
+          order.transform_keys! { |key| key.to_s.camelize(:lower) }
+          order[:transaction_type] ||= 'DIRECT_CAPTURE'
+          order
+        end
+        headers = { "Idempotency-Key": idempotency_key || SecureRandom.hex(15) }
+        get_response('recurring/v3/agreements/charges', :post, body, headers)
+      end
+
+      def cancel_charge(agreement_id, charge_id)
+        headers = { "Idempotency-Key": SecureRandom.hex(15) }
+        get_response("recurring/v3/agreements/#{agreement_id}/charges/#{charge_id}", :delete, {}, headers)
+      end
+
+      def capture(opts = {})
+        body = {
+          amount: opts[:amount],
+          description: opts[:description]
+        }
+        headers = { "Idempotency-Key": opts[:idempotency_key] || SecureRandom.hex(15) }
+        get_response("recurring/v3/agreements/#{opts[:agreement_id]}/charges/#{opts[:charge_id]}/capture", :post, body, headers)
+      end
+
       # Compares client options to a Hash of requested options
       #
       # @param opts [Hash] Options to compare with current client options
