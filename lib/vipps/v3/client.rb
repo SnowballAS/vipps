@@ -106,7 +106,7 @@ module Vipps
       def multiple_charge(orders = [], idempotency_key = nil)
         body = orders.map do |order|
           order.transform_keys! { |key| key.to_s.camelize(:lower) }
-          order[:transaction_type] ||= 'DIRECT_CAPTURE'
+          order[:transactionType] ||= 'DIRECT_CAPTURE'
           order
         end
         headers = { "Idempotency-Key": idempotency_key || SecureRandom.hex(15) }
