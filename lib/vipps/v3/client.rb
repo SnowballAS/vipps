@@ -155,8 +155,10 @@ module Vipps
           "Authorization": "bearer #{@access_token}",
           "Ocp-Apim-Subscription-Key": ocp_apim_access_token,
           "Merchant-Serial-Number": @merchant_number,
+          "Vipps-System-Version": Vipps::VERSION,
           "Vipps-System-Name": 'Snowball_v3',
-          "Vipps-System-Plugin-Name": 'Snowball-webshop_v3'
+          "Vipps-System-Plugin-Name": 'Snowball-webshop_v3',
+          "Vipps-System-Plugin-Version": Vipps::VERSION
         })
         request.headers = req_headers
         request.body = params.to_json
