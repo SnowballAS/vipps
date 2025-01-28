@@ -127,6 +127,22 @@ module Vipps
         get_response("recurring/v3/agreements/#{opts[:agreement_id]}/charges/#{opts[:charge_id]}/capture", :post, body, headers)
       end
 
+      def register_webhook(opts = {})
+        body = {
+          events: opts[:events],
+          url: opts[:url]
+        }
+        get_response("webhooks/v1/webhooks", :post, body)
+      end
+
+      def get_webhooks
+        get_response("webhooks/v1/webhooks", :get, {})
+      end
+
+      def delete_webhook(id)
+        get_response("webhooks/v1/webhooks/#{id}", :delete, {})
+      end
+
       # Compares client options to a Hash of requested options
       #
       # @param opts [Hash] Options to compare with current client options
@@ -155,8 +171,10 @@ module Vipps
           "Authorization": "bearer #{@access_token}",
           "Ocp-Apim-Subscription-Key": ocp_apim_access_token,
           "Merchant-Serial-Number": @merchant_number,
+          "Vipps-System-Version": Vipps::VERSION,
           "Vipps-System-Name": 'Snowball_v3',
-          "Vipps-System-Plugin-Name": 'Snowball-webshop_v3'
+          "Vipps-System-Plugin-Name": 'Snowball-webshop_v3',
+          "Vipps-System-Plugin-Version": Vipps::VERSION
         })
         request.headers = req_headers
         request.body = params.to_json

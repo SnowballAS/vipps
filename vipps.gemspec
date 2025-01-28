@@ -10,7 +10,6 @@ Gem::Specification.new do |s|
   s.homepage    = "https://github.com/karabitki/vipps"
   s.summary     = %q{A gem for speaking to Vipps recurring payment service}
   s.description = %q{This gem simplifies the comunication with the vipps service significantly. Right now it only supports register and sale, more is to come.}
-  s.has_rdoc    = true
 
   s.rubyforge_project = "vipps"
 
