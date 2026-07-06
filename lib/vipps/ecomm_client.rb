@@ -62,6 +62,21 @@ module Vipps
       get_response("ecomm/v2/payments/#{opts[:vipps_order_id]}/capture", :post, body.deep_stringify_keys, headers)
     end
 
+    def refund(opts = {})
+      body = {
+        merchantInfo: {
+          merchantSerialNumber: @merchant_number,
+        },
+        transaction: {
+          amount: opts[:amount],
+          transactionText: opts[:transaction_text]
+        }
+      }
+      headers = { "X-Request-Id": opts[:idempotency_key] }
+      get_response("ecomm/v2/payments/#{opts[:vipps_order_id]}/refund", :post, body.deep_stringify_keys, headers)
+
+    end
+
     def get_order(id)
       get_response("ecomm/v2/payments/#{id}/status", :get, {})
     end
